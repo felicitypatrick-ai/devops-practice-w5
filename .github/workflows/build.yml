@@ -26,10 +26,6 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           cat test-report.txt >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
-      - name: Check the order prices
-        run: python scripts/price_check.py orders
-      - name: Check the gift box prices
-        run: python scripts/price_check.py gift-boxes
       - name: Build the package
         run: |
           mkdir -p dist
@@ -40,3 +36,17 @@ jobs:
         with:
           name: bakery-app
           path: dist/
+
+  price-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        part: [ orders, gift-boxes ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check the prices
+        run: python scripts/price_check.py ${{ matrix.part }}

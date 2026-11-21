@@ -26,6 +26,10 @@ jobs:
           echo '```' >> "$GITHUB_STEP_SUMMARY"
           cat test-report.txt >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - name: Check the order prices
+        run: python scripts/price_check.py orders
+      - name: Check the gift box prices
+        run: python scripts/price_check.py gift-boxes
       - name: Build the package
         run: |
           mkdir -p dist
